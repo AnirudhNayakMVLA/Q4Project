@@ -13,7 +13,8 @@ public class ClientScreen extends JPanel implements ActionListener{
     private JTextArea textArea;
     private String username;
     private JScrollPane scrollPane;
-
+    private Board board;
+    
     public ClientScreen() {
 		setLayout(null);
 		setFocusable(true);
@@ -31,7 +32,14 @@ public class ClientScreen extends JPanel implements ActionListener{
 
 			Thread t = new Thread(new Receiver());
 			t.start();
-
+            try{
+                Object o = inObj.readObject();
+                if(o instanceof Board){
+                    board = (Board) o;
+                }
+            }catch(ClassNotFoundException e){
+                e.printStackTrace();
+            }
 		}catch(IOException e) {
 			System.err.println("Couldn't get I/O for the connection to " + hostName);
 			System.exit(1);
@@ -58,6 +66,11 @@ public class ClientScreen extends JPanel implements ActionListener{
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        try{
+        board.drawBoard(g);
+        }catch(Exception e){
+            System.out.println("board not initialized");
+        }
     }
 
     public void actionPerformed(ActionEvent e) {

@@ -1,6 +1,8 @@
 import java.util.Arrays;
+import java.util.Iterator;
+import java.lang.Iterable;
 
-public class ArrayList<E> {
+public class ArrayList<E> implements Iterable<E>{
     private Object[] list;
     private int size;
     private int capacity;
@@ -92,4 +94,27 @@ public class ArrayList<E> {
     public int size() {
         return size;
     }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return myIterator;
+    }
+
+    private Iterator<E> myIterator = new Iterator<E>() {
+        private int index = 0;
+
+        @Override
+        public boolean hasNext() {
+            return index < size;
+        }
+
+        @Override
+        public E next() {
+            return get(index++);
+        }
+    };
 }

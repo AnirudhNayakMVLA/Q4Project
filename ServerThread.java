@@ -14,6 +14,7 @@ public class ServerThread implements Runnable{
         try{
             outObj = new ObjectOutputStream(clientSocket.getOutputStream());
             inObj = new ObjectInputStream(clientSocket.getInputStream());
+            send(manager.getBoard());
         }catch(SocketException e){
             e.printStackTrace();
             System.out.println("socket exception???/");
@@ -29,7 +30,7 @@ public class ServerThread implements Runnable{
 		while(true){
             try{
                 Object o = inObj.readObject();
-                sendMessage(o.toString() + "\n");
+                sendMessage((Board)o);
                 //Clears and close the output stream.
             } catch (IOException ex){
                 System.out.println("Error listening for a connection");
@@ -40,16 +41,14 @@ public class ServerThread implements Runnable{
         }
 	}
     
-    public void sendMessage(String message){
-        manager.broadcastMessage(message);
+    public void sendMessage(Board board){
+        manager.broadcastMessage(board);
     }
 
-    public void send(String message){
+    public void send(Board board){
         try{
-            outObj.writeObject(message);
-            if(message.contains("bye")){
-                clientSocket.close();
-            }
+            outObj.writeObject(board);
+
         }catch(Exception e){
 
         }

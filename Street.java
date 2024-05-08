@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public abstract class Street{
+public class Street{
     String name, color;
     int rent, price, mortgage, houseCost, hotelCost, houses, function;
     public Street(String name, int rent, int price, int mortgage, int houseCost, int hotelCost, int houses, boolean hotel, String color, int function){
@@ -19,19 +19,34 @@ public abstract class Street{
         this.name = name;
         this.function = function;
     }
-    
-    public enum Function{
-        RAILROAD(0), UTILITY(1), STREET(2), GO(3), JAIL(4), FREEPARKING(5), GOTOJAIL(6), TAX(7), CHANCE(8), COMMUNITYCHEST(9);
+
+        
+    public static enum Function{
+        STREET(0), RAILROAD(1), UTILITY(2), GO(3), JAIL(4), FREE_PARKING(5), GO_TO_JAIL(6), TAX(7), CHANCE(8), COMMUNITY_CHEST(9);
 
         private int i;
         
         private Function(int i){
             this.i = i;
         }
+
+        public int getInt(){
+            return i;
+        }
     }
 
     public void drawMe(Graphics g, int x, int y, int rotation){
         Graphics2D g2d = (Graphics2D) g;
+        g2d.rotate(Math.toRadians(rotation), x, y);
+        g.setColor(Color.WHITE);
+        g.fillRect(x, y, 30, 60);
+        g.setColor(Color.BLACK);
+        g.drawRect(x, y, 30, 60);
+        g.setColor(Color.BLACK);
+        g.drawString(name, x, y);
+        g2d.rotate(Math.toRadians(-rotation), x, y);
+        System.out.println("Drew street" + name);
+
     }
     
 
