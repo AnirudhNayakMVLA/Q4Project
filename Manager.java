@@ -27,7 +27,7 @@ public class Manager {
 	public void resetBoard(){
 		ArrayList<Street> streetList = new ArrayList<Street>();
 		streetList.add(new Street("Go", Street.Function.GO.getInt()));
-		streetList.add(new Street("2555 Katrina Way", 2, 60, 40, 50, 50, 0, false, "Brown", Street.Function.STREET.getInt()));
+		streetList.add(new Street("Lubich", 2, 60, 40, 50, 50, 0, false, "Brown", Street.Function.STREET.getInt()));
 		streetList.add(new Street("Community Chest", Street.Function.COMMUNITY_CHEST.getInt()));
 		streetList.add(new Street("Brower Avenue", 4, 60, 40, 50, 50, 0, false, "Brown", Street.Function.STREET.getInt()));
 		streetList.add(new Street("Income Tax", Street.Function.TAX.getInt()));
@@ -63,9 +63,9 @@ public class Manager {
 		streetList.add(new Street("Shoreline Boulevard", 28, 320, 160, 200, 200, 0, false, "Green", Street.Function.STREET.getInt()));
 		streetList.add(new Street("I-280", 25, 200, 100, 100, 100, 0, false, "Railroad", Street.Function.RAILROAD.getInt()));
 		streetList.add(new Street("Chance", Street.Function.CHANCE.getInt()));
-		streetList.add(new Street("Castro St", 35, 350, 175, 200, 200, 0, false, "Dark Blue", Street.Function.STREET.getInt()));
+		streetList.add(new Street("Castro St", 35, 350, 175, 200, 200, 0, false, "Blue", Street.Function.STREET.getInt()));
 		streetList.add(new Street("Luxury Tax", Street.Function.TAX.getInt()));
-		streetList.add(new Street("El Camino Real", 50, 400, 200, 200, 200, 0, false, "Dark Blue", Street.Function.STREET.getInt()));
+		streetList.add(new Street("El Camino Real", 50, 400, 200, 200, 200, 0, false, "Blue", Street.Function.STREET.getInt()));
 		board = new Board(streetList);
 	}
 
