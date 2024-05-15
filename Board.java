@@ -1,16 +1,23 @@
-import java.awt.*;
+import java.io.Serializable;
 
-
-public class Board {
+public class Board implements Serializable{
     ArrayList<Street> streets;
-    Color bgColor = new Color(205, 230, 208);
+    //Color bgColor = new Color(205, 230, 208);
     
     public Board(ArrayList<Street> streets){
         this.streets = streets;
     }
 
-    public void drawBoard(Graphics g){
-        g.setColor(bgColor);
+    public String toString(){
+        String s = "";
+        for(Street street : streets){
+            s += street.toString() + ", ";
+        }
+        return s;
+    }
+
+    /*public void drawBoard(Graphics g){
+        //g.setColor(bgColor);
         g.drawRect(170, 170, 660, 660);
         int x = 770;
         int y = 770;
@@ -50,6 +57,8 @@ public class Board {
                 y += 30;
             }
         }
+    }*/
+    public ArrayList<Street> getStreets(){
+        return streets;
     }
-    
 }

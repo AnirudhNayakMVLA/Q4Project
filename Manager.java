@@ -9,6 +9,7 @@ public class Manager {
  
     public void add(ServerThread thread) {
         threads.add(thread);
+		//broadcastMessage(board);
     }
  
     public void broadcastMessage(Board board) {
@@ -67,7 +68,5 @@ public class Manager {
 		streetList.add(new Street("El Camino Real", 50, 400, 200, 200, 200, 0, false, "Dark Blue", Street.Function.STREET.getInt()));
 		board = new Board(streetList);
 	}
-
-    
 
 }

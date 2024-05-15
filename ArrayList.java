@@ -1,8 +1,9 @@
 import java.util.Arrays;
 import java.util.Iterator;
+import java.io.Serializable;
 import java.lang.Iterable;
 
-public class ArrayList<E> implements Iterable<E>{
+public class ArrayList<E> implements Iterable<E>, Serializable{
     private Object[] list;
     private int size;
     private int capacity;
@@ -101,10 +102,10 @@ public class ArrayList<E> implements Iterable<E>{
 
     @Override
     public Iterator<E> iterator() {
-        return myIterator;
+        return new myIterator();
     }
 
-    private Iterator<E> myIterator = new Iterator<E>() {
+    private class myIterator implements Iterator<E>, Serializable{
         private int index = 0;
 
         @Override
