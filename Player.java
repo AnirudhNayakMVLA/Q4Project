@@ -1,6 +1,8 @@
-public class Player{
+import java.io.Serializable;
+
+public class Player implements Serializable{
    //write the class for a monopoly player
-    private String name;
+    private int playerNum;
     private int money;
     private int position;
     private boolean inJail;
@@ -13,63 +15,105 @@ public class Player{
     private int numTurns;
     private int numDoubles;
     private int numJailTurns;
-    
-    // private int numJailRolls;
-    // private int numJailDoubles;
-    // private int numJailCards;
-    // private int numJailPaid;
-    // private int numJailBids;
-    // private int numJailBankrupts;
-    // private int numJailRollsDoubles;
-    // private int numJailRollsCards;
-    // private int numJailRollsPaid;
-    // private int numJailRollsBids;
-    // private int numJailRollsBankrupts;
-    // private int numJailCardsDoubles;
-    // private int numJailCardsPaid;
-    // private int numJailCardsBids;
-    // private int numJailCardsBankrupts;
-    // private int numJailPaidBids;
-    // private int numJailPaidBankrupts;
-    // private int numJailBidsBankrupts;
-    // private int numJailRollsDoublesCards;
-    // private int numJailRollsDoublesPaid;
-    // private int numJailRollsDoublesBids;
-    // private int numJailRollsDoublesBankrupts;
-    // private int numJailRollsCardsPaid;
-    // private int numJailRollsCardsBids;
-    // private int numJailRollsCardsBankrupts;
-    // private int numJailRollsPaidBids;
-    // private int numJailRollsPaidBankrupts;
-    // private int numJailRollsBidsBankrupts;
-    // private int numJailCardsPaidBids;
-    // private int numJailCardsPaidBankrupts;
-    // private int numJailCardsBidsBankrupts;
-    // private int numJailPaidBidsBankrupts;
-    // private int numJailRollsDoublesCardsPaid;
-    // private int numJailRollsDoublesCardsBids;
-    // private int numJailRollsDoublesCardsBankrupts;
-    // private int numJailRollsDoublesPaidBids;
-    // private int numJailRollsDoublesPaidBankrupts;
-    // private int numJailRollsDoublesBidsBankrupts;
-    // private int numJailRollsCardsPaidBids;
-    // private int numJailRollsCardsPaidBankrupts;
-    // private int numJailRollsCardsBidsBankrupts;
-    // private int numJailRollsPaidBidsBankrupts;
-    // private int numJailCardsPaidBidsBankrupts;
-    // private int numJailRollsDoublesCardsPaidBids;
-    // private int numJailRollsDoublesCardsPaidBankrupts;
-    // private int numJailRollsDoublesCardsBidsBankrupts;
-    // private int numJailRollsDoublesPaidBidsBankrupts;
-    // private int numJailRollsCardsPaidBidsBankrupts;
-    // private int numJailRollsDoublesCardsPaidBidsBankrupts;
-    // private int numJailRollsDoublesCardsPaidBidsBankrupts;
-    // private int numJailRollsDoublesCardsPaidBidsBankrupts;
-    // private int numJailRollsDoublesCardsPaidBidsBankrupts;
-    // private int numJailRollsDoublesCardsPaidBidsBankrupts;
-    // private int numJailRollsDoublesCardsPaidBidsBankrupts;
-    // private int numJailRollsDoublesCardsPaidBidsBankrupts;
-    // private int numJailRollsDoublesCardsPaidBidsBankrupts;
-    // private int numJailRollsDoublesCardsPaidBidsBankrupts;
+    private String color;
+
+    public Player(int num){
+        this.playerNum = num;
+        money = 1500;
+        position = 0;
+        inJail = false;
+        jailTurns = 0;
+        numRailroads = 0;
+        numUtilities = 0;
+        properties = new Street[28];
+        numGetOutOfJailCards = 0;
+        isBankrupt = false;
+        numTurns = 0;
+        numDoubles = 0;
+        numJailTurns = 0;
+        color = "";
+    }
+
+    public void addProperty(Street s){
+        for(int i = 0; i < properties.length; i++){
+            if(properties[i] == null){
+                properties[i] = s;
+                break;
+            }
+        }
+    }
+
+    public void removeProperty(Street s){
+        for(int i = 0; i < properties.length; i++){
+            if(properties[i] == s){
+                properties[i] = null;
+                break;
+            }
+        }
+    }
+
+    public void addMoney(int m){
+        money += m;
+    }
+
+    public void subtractMoney(int m){
+        money -= m;
+    }
+
+    public void setPosition(int p){
+        position = p;
+    }
+
+    public void setInJail(boolean b){
+        inJail = b;
+    }
+
+    public void setJailTurns(int j){
+        jailTurns = j;
+    }
+
+    public void setNumRailroads(int n){
+        numRailroads = n;
+    }
+
+    public void setNumUtilities(int n){
+        numUtilities = n;
+    }
+
+    public void setNumGetOutOfJailCards(int n){
+        numGetOutOfJailCards = n;
+    }
+
+    public void setIsBankrupt(boolean b){
+        isBankrupt = b;
+    }
+
+    public void setNumTurns(int n){
+        numTurns = n;
+    }
+
+    public void setNumDoubles(int n){
+        numDoubles = n;
+    }
+
+    public void setNumJailTurns(int n){
+        numJailTurns = n;
+    }
+
+    public int getPlayerNum(){
+        return playerNum;
+    }
+
+    public int getMoney(){
+        return money;
+    }
+    public void setColor(String color){
+        this.color = color;
+    }
+
+    public int getPosition(){
+        return position;
+    }
+
     
 }

@@ -16,15 +16,22 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private String username;
     private JScrollPane scrollPane;
     private Board board;
+    private int playerNum;
+    private boolean startMenu = true;
+    private Color bgColor;
+    private Player player;
+
     
     public ClientScreen() {
+        player = new Player(1);
+
+        bgColor = new Color(202, 232, 224);
 		setLayout(null);
 		setFocusable(true);
         addMouseListener(this);
     }
-
     public void connect(){
-        String hostName = "localhost"; 
+        String hostName = "10.210.114.146"; 
 		int portNumber = 1024;
 
         try {
@@ -53,13 +60,28 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 	}
 
     public void paintComponent(Graphics g) {
-        g.drawString("Welcome to the game", 10, 10);
-        try{
-            drawBoard(g);
-            System.out.println("Board drawn");
-        }catch(Exception e){
-            System.out.println("board not initialized");
+        if(startMenu){
+            //draw 4 squares with different colors
+            g.setColor(Color.RED);
+            g.fillRect(0, 0, 500, 500);
+            g.setColor(Color.BLUE);
+            g.fillRect(0, 500, 500, 500);
+            g.setColor(Color.GREEN);
+            g.fillRect(500, 0, 500, 500);
+            g.setColor(Color.YELLOW);
+            g.fillRect(500, 500, 500, 500);
         }
+        else{
+            try{
+                g.setColor(bgColor);
+                g.fillRect(0, 0, 1000, 1000);
+                drawBoard(g);
+                System.out.println("Board drawn");
+            }catch(Exception e){
+                System.out.println("board not initialized");
+            }
+        }
+        
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -71,6 +93,25 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     public void mousePressed(MouseEvent e) {
         System.out.println("X: " + e.getX() + ", Y: " + e.getY());
+        if(startMenu){
+            if(e.getX() <= 500 && e.getY() <= 500){
+                playerNum = 1;
+            }
+            else if(e.getX() <= 500 && e.getY() >= 500){
+                playerNum = 2;
+            }
+            else if(e.getX() >= 500 && e.getY() <= 500){
+                playerNum = 3;
+            }
+            else if(e.getX() >= 500 && e.getY() >= 500){
+                playerNum = 4;
+            }
+            startMenu = false;
+            board.addPlayer(player);
+            try{outObj.writeObject(board);}
+            catch(IOException ex){ex.printStackTrace();}
+            repaint();
+        }
     }
 
     public void mouseReleased(MouseEvent e) {
@@ -88,8 +129,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     public void drawBoard(Graphics g){
         ArrayList <Street> streets = board.getStreets();
-        //g.setColor(bgColor);
+        g.setColor(bgColor);
         System.out.println("Drawing board");
+        g.fillRect(110, 110, 780, 780);
+        g.setColor(Color.BLACK);
         g.drawRect(110, 110, 780, 780);
         int x = 770;
         int y = 770;
@@ -132,6 +175,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 y += 60;
             }
         }
+        
     }
 
 }
