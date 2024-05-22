@@ -29,18 +29,16 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         addMouseListener(this);
     }
     public void connect(){
-        String hostName = "192.168.5.114"; //192.168.5.114  for bens wifi, 10.210.114.146 for school wifi
+        String hostName = "192.168.1.15"; /*
+        Anirudh's Computer: 192.168.5.114  for bens wifi, 10.210.114.146 for school wifi, 192.168.1.15 for anirudhs wifi
+        */
 		int portNumber = 1024;
 
         try {
 			Socket serverSocket = new Socket(hostName, portNumber);
 			outObj = new ObjectOutputStream(serverSocket.getOutputStream());
-            System.out.println("penis");
 			inObj = new ObjectInputStream(serverSocket.getInputStream());
-            System.out.println("cock");
-
             try{
-                System.out.println("Connectd to server");
 				while(true){
 					Object o = inObj.readObject();
                     System.out.println(o);
@@ -155,55 +153,42 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             if(p != null){
                 System.out.println("Player at pos " + i);
                 p.drawMe(x + 20, y + 50, g);
+                System.out.println("Player drawn at x: " + (x + 20) + ", y: " + (y + 50));
             }
-            if(i == 0){
-                x -= 60;
-            }
-            else{
-                x -= 60;
-            }
+            x -= 60;
         }
         x += 60;
         for(int i = 10; i < 20; i++){
             streets.get(i).drawMe(g, x, y, 90);
             Player p = board.playerAtPos(i);
             if(p != null){
+                System.out.println("Player at pos " + i);
                 p.drawMe(x - 50, y + 20, g);
+                System.out.println("Player drawn at x: " + (x -50) + ", y: " + (y + 20));
             }
-            if(i == 10){
-                y -= 60;
-            }
-            else{
-                y -= 60;
-            }
+            y -= 60;
         }
         y += 60;
         for(int i = 20; i < 30; i++){
             streets.get(i).drawMe(g, x, y, 180);
             Player p = board.playerAtPos(i);
             if(p != null){
-                p.drawMe(x + 20, y - 50, g);
+                System.out.println("Player at pos " + i);
+                p.drawMe(x + 20, y - 10, g);
+                System.out.println("Player drawn at x: " + (x + 20) + ", y: " + (y - 50));
             }
-            if(i == 20){
-                x += 60;
-            }
-            else{
-                x += 60;
-            }
+            x += 60;
         }
         x-=60;
         for(int i = 30; i < 40; i++){
             streets.get(i).drawMe(g, x, y, 270);
             Player p = board.playerAtPos(i);
             if(p != null){
+                System.out.println("Player at pos " + i);
                 p.drawMe(x + 50, y + 20, g);
+                System.out.println("Player drawn at x: " + (x + 50) + ", y: " + (y + 20));
             }
-            if(i == 30){
-                y += 60;
-            }
-            else{
-                y += 60;
-            }
+            y += 60;
         }
         
     }
