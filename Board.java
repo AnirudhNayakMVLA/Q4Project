@@ -40,9 +40,13 @@ public class Board implements Serializable{
         players.remove(p);
     }
 
-    public void updatePlayer(Player p){
-        players.remove(p);
-        players.add(p);
+    public void movePlayer(int playerNum, int numToMove){
+        for(Player p : players){    
+            if(p.getPlayerNum() == playerNum){
+                p.move(numToMove);
+                return;
+            }
+        }
     }
 
     public ArrayList<Player> getPlayers(){

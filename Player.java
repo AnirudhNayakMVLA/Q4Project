@@ -68,8 +68,8 @@ public class Player implements Serializable{
 
     public void move(int m){
         position += m;
-        if(position >= 40){
-            position -= 40;
+        if(position >= 39){
+            position -= 39;
             addMoney(200);
         }
     }
@@ -128,5 +128,7 @@ public class Player implements Serializable{
     public void drawMe(int x, int y, Graphics g){
         g.setColor(color);
         g.fillOval(x, y, 20, 20); 
+        g.setColor(Color.BLACK);
+        g.drawOval(x, y, 20, 20);
     }
 }
