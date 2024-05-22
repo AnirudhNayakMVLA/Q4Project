@@ -16,6 +16,17 @@ public class Board implements Serializable{
         return s;
     }
 
+    public Player playerAtPos(int pos){
+        for(Player p : players){
+            if(p.getPosition() == pos){
+                System.out.println(players);
+                System.out.println(p);
+                return p;
+            }
+        }
+        return null;
+    }
+
 
     public ArrayList<Street> getStreets(){
         return streets;
@@ -27,6 +38,11 @@ public class Board implements Serializable{
     
     public void removePlayer(Player p){
         players.remove(p);
+    }
+
+    public void updatePlayer(Player p){
+        players.remove(p);
+        players.add(p);
     }
 
     public ArrayList<Player> getPlayers(){

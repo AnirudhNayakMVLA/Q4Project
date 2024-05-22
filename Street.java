@@ -84,7 +84,7 @@ public class Street implements Serializable{
         }
         
         g2d.rotate(Math.toRadians(-rotation), x, y);
-        System.out.println("Drew street" + name);
+        // System.out.println("Drew street" + name);
 
     }
     

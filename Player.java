@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.awt.*;
 
 public class Player implements Serializable{
    //write the class for a monopoly player
@@ -15,10 +16,11 @@ public class Player implements Serializable{
     private int numTurns;
     private int numDoubles;
     private int numJailTurns;
-    private String color;
+    private Color color;
 
-    public Player(int num){
+    public Player(int num, Color color){
         this.playerNum = num;
+        this.color = color;
         money = 1500;
         position = 0;
         inJail = false;
@@ -31,7 +33,7 @@ public class Player implements Serializable{
         numTurns = 0;
         numDoubles = 0;
         numJailTurns = 0;
-        color = "";
+        
     }
 
     public void addProperty(Street s){
@@ -62,6 +64,14 @@ public class Player implements Serializable{
 
     public void setPosition(int p){
         position = p;
+    }
+
+    public void move(int m){
+        position += m;
+        if(position >= 40){
+            position -= 40;
+            addMoney(200);
+        }
     }
 
     public void setInJail(boolean b){
@@ -107,7 +117,7 @@ public class Player implements Serializable{
     public int getMoney(){
         return money;
     }
-    public void setColor(String color){
+    public void setColor(Color color){
         this.color = color;
     }
 
@@ -115,5 +125,8 @@ public class Player implements Serializable{
         return position;
     }
 
-    
+    public void drawMe(int x, int y, Graphics g){
+        g.setColor(color);
+        g.fillOval(x, y, 20, 20); 
+    }
 }

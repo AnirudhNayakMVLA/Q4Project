@@ -17,13 +17,14 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private JScrollPane scrollPane;
     private Board board;
     private int playerNum;
+    private Color playerColor;
     private boolean startMenu = true;
     private Color bgColor;
     private Player player;
 
     
     public ClientScreen() {
-        player = new Player(1);
+        player = new Player(1, Color.RED);
 
         bgColor = new Color(202, 232, 224);
 		setLayout(null);
@@ -96,20 +97,32 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         if(startMenu){
             if(e.getX() <= 500 && e.getY() <= 500){
                 playerNum = 1;
+                playerColor = Color.RED;
+                player = new Player(playerNum, playerColor);
             }
             else if(e.getX() <= 500 && e.getY() >= 500){
                 playerNum = 2;
+                playerColor = Color.BLUE;
+                player = new Player(playerNum, playerColor);
             }
             else if(e.getX() >= 500 && e.getY() <= 500){
                 playerNum = 3;
+                playerColor = Color.GREEN;
+                player = new Player(playerNum, playerColor);
             }
             else if(e.getX() >= 500 && e.getY() >= 500){
                 playerNum = 4;
+                playerColor = Color.YELLOW;
+                player = new Player(playerNum, playerColor);
             }
             startMenu = false;
             board.addPlayer(player);
             try{outObj.writeObject(board);}
             catch(IOException ex){ex.printStackTrace();}
+            repaint();
+        }else{
+            player.move(1);
+            System.out.println("player moved" + player.getPosition());
             repaint();
         }
     }
@@ -138,6 +151,11 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         int y = 770;
         for (int i = 0; i < 10; i++){
             streets.get(i).drawMe(g, x, y, 0);
+            Player p = board.playerAtPos(i);
+            if(p != null){
+                System.out.println("Player at pos " + i);
+                p.drawMe(x + 20, y + 35, g);
+            }
             if(i == 0){
                 x -= 60;
             }
@@ -148,6 +166,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         x += 60;
         for(int i = 10; i < 20; i++){
             streets.get(i).drawMe(g, x, y, 90);
+            Player p = board.playerAtPos(i);
+            if(p != null){
+                p.drawMe(x + 20, y + 35, g);
+            }
             if(i == 10){
                 y -= 60;
             }
