@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.*;
 import java.awt.event.MouseListener;
+import java.util.Random;
 
 
 public class ClientScreen extends JPanel implements ActionListener, MouseListener{
@@ -20,16 +21,34 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private Color playerColor;
     private boolean startMenu = true;
     private Color bgColor;
-
+    private Random rand;
+    private JButton buy, leave;
+    private boolean move = true;
+    
     
     public ClientScreen() {
         bgColor = new Color(202, 232, 224);
+        rand = new Random();
+        
+        buy = new JButton("Buy");
+        buy.setBounds(0, 0, 100, 50);
+        buy.addActionListener(this);
+        add(buy);
+        
+        leave = new JButton("Leave");
+        leave.setBounds(0, 50, 100, 50);
+        leave.addActionListener(this);
+        add(leave);
+
+        buy.setVisible(false);
+        leave.setVisible(false);
+        
 		setLayout(null);
 		setFocusable(true);
         addMouseListener(this);
     }
     public void connect(){
-        String hostName = "192.168.1.15"; /*
+        String hostName = "10.210.114.146"; /*
         Anirudh's Computer: 192.168.5.114  for bens wifi, 10.210.114.146 for school wifi, 192.168.1.15 for anirudhs wifi
         */
 		int portNumber = 1024;
@@ -41,13 +60,12 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             try{
 				while(true){
 					Object o = inObj.readObject();
-                    System.out.println(o);
 					if(o instanceof Board){
 						board = (Board) o;
                         System.out.println("Board received");
                         repaint();
 					}
-					System.out.println(board);
+					//System.out.println(board);
 				}
             }catch(ClassNotFoundException e){
                 e.printStackTrace();
@@ -76,6 +94,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 g.fillRect(0, 0, 1000, 1000);
                 drawBoard(g);
                 System.out.println("Board drawn");
+                g.setColor(Color.BLACK);
+                g.drawString(board.getPlayer(playerNum).getMoney() + "", 0, 250);
             }catch(Exception e){
                 System.out.println("board not initialized");
             }
@@ -84,6 +104,23 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     }
 
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == buy){
+            if(board.getPlayer(playerNum).buyStreet(board.getStreets().get(board.getPlayer(playerNum).getPosition()))){
+                System.out.println("Bought street");
+            }
+            leave.setVisible(false);
+            buy.setVisible(false);
+            try{outObj.writeObject(board);}
+            catch(IOException ex){ex.printStackTrace();}
+            move = true;
+        }
+        if(e.getSource() == leave){
+            System.out.println("fuck");
+            leave.setVisible(false);
+            buy.setVisible(false);
+            move = true;
+        }
+        repaint();
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -91,7 +128,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     }
 
     public void mousePressed(MouseEvent e) {
-        System.out.println("X: " + e.getX() + ", Y: " + e.getY());
         if(startMenu){
             if(e.getX() <= 500 && e.getY() <= 500){
                 playerNum = 1;
@@ -116,13 +152,23 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             startMenu = false;
             try{outObj.writeObject(board);}
             catch(IOException ex){ex.printStackTrace();}
-            repaint();
-        }else{
-            board.movePlayer(playerNum, 1);
+            //repaint();
+        }else if(buy.isVisible() == false && leave.isVisible() == false && move){
+            board.movePlayer(playerNum, rand.nextInt(6)+1 + rand.nextInt(6)+1);
             try{outObj.writeObject(board);}
             catch(IOException ex){ex.printStackTrace();}
-            repaint();
+            if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function <= 2){
+                System.out.println("Buy or leave!");
+                buy.setVisible(true);
+                leave.setVisible(true);
+                move = false;
+            }
+            
+            //repaint();
+        }else{
+            System.out.println("Buy or leave!");
         }
+        
     }
 
     public void mouseReleased(MouseEvent e) {
@@ -149,44 +195,97 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         int y = 770;
         for (int i = 0; i < 10; i++){
             streets.get(i).drawMe(g, x, y, 0);
-            Player p = board.playerAtPos(i);
+            /*Player p = board.playerAtPos(i);
             if(p != null){
                 System.out.println("Player at pos " + i);
                 p.drawMe(x + 20, y + 50, g);
-                System.out.println("Player drawn at x: " + (x + 20) + ", y: " + (y + 50));
-            }
+            }*/
             x -= 60;
         }
         x += 60;
         for(int i = 10; i < 20; i++){
             streets.get(i).drawMe(g, x, y, 90);
-            Player p = board.playerAtPos(i);
-            if(p != null){
-                System.out.println("Player at pos " + i);
-                p.drawMe(x - 50, y + 20, g);
-                System.out.println("Player drawn at x: " + (x -50) + ", y: " + (y + 20));
-            }
+            // Player p = board.playerAtPos(i);
+            // if(p != null){
+            //     System.out.println("Player at pos " + i);
+            //     p.drawMe(x - 50, y + 20, g);
+            // }
             y -= 60;
         }
         y += 60;
         for(int i = 20; i < 30; i++){
             streets.get(i).drawMe(g, x, y, 180);
-            Player p = board.playerAtPos(i);
-            if(p != null){
-                System.out.println("Player at pos " + i);
-                p.drawMe(x + 20, y - 10, g);
-                System.out.println("Player drawn at x: " + (x + 20) + ", y: " + (y - 50));
-            }
             x += 60;
         }
         x-=60;
         for(int i = 30; i < 40; i++){
             streets.get(i).drawMe(g, x, y, 270);
+            y += 60;
+        }
+        x = 770;
+        y = 770;
+        for (int i = 0; i < 10; i++){
             Player p = board.playerAtPos(i);
             if(p != null){
-                System.out.println("Player at pos " + i);
+                // System.out.println("Player at pos " + i);
+                //System.out.println(board.playerAtPos(i).getMoney());
+                p.drawMe(x + 20, y + 50, g);
+                if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() == null) && !move){
+                   buy.setVisible(true);
+                   leave.setVisible(true);
+                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && !move){
+                    p.payPlayer(streets.get(i).getOwner(), streets.get(i).getRent());
+                }
+            }
+            x -= 60;
+        }
+        x += 60;
+        for(int i = 10; i < 20; i++){
+    
+            Player p = board.playerAtPos(i);
+            if(p != null){
+                // System.out.println("Player at pos " + i);
+                //System.out.println(board.playerAtPos(i).getMoney());
+                p.drawMe(x - 50, y + 20, g);
+                if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() == null && !move)){
+                   buy.setVisible(true);
+                   leave.setVisible(true);
+                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && !move){
+                    p.payPlayer(streets.get(i).getOwner(), streets.get(i).getRent());
+                }
+            }
+            y -= 60;
+        }
+        x-= 60;
+        y += 60;
+        for(int i = 20; i < 30; i++){
+            Player p = board.playerAtPos(i);
+            if(p != null){
+                // System.out.println("Player at pos " + i);
+                //System.out.println(board.playerAtPos(i).getMoney());
+                p.drawMe(x + 20, y - 50, g);
+                if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() == null) && !move){
+                   buy.setVisible(true);
+                   leave.setVisible(true);
+                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && !move){
+                    p.payPlayer(streets.get(i).getOwner(), streets.get(i).getRent());
+                }
+            }
+            x += 60;
+        }
+        y-=60;
+        for(int i = 30; i < 40; i++){
+            Player p = board.playerAtPos(i);
+            if(p != null){
+                // System.out.println("Player at pos " + i);
+                //System.out.println(board.playerAtPos(i).getMoney());
                 p.drawMe(x + 50, y + 20, g);
-                System.out.println("Player drawn at x: " + (x + 50) + ", y: " + (y + 20));
+                if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() == null) && !move){
+                   buy.setVisible(true);
+                   leave.setVisible(true);
+                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && !move){
+                    p.payPlayer(streets.get(i).getOwner(), streets.get(i).getRent());
+                }
             }
             y += 60;
         }

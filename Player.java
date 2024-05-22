@@ -10,7 +10,7 @@ public class Player implements Serializable{
     private int jailTurns;
     private int numRailroads;
     private int numUtilities;
-    private Street [] properties;
+    private ArrayList<Street> properties;
     private int numGetOutOfJailCards;
     private boolean isBankrupt;
     private int numTurns;
@@ -27,7 +27,7 @@ public class Player implements Serializable{
         jailTurns = 0;
         numRailroads = 0;
         numUtilities = 0;
-        properties = new Street[28];
+        properties = new ArrayList<Street>();
         numGetOutOfJailCards = 0;
         isBankrupt = false;
         numTurns = 0;
@@ -36,22 +36,28 @@ public class Player implements Serializable{
         
     }
 
-    public void addProperty(Street s){
-        for(int i = 0; i < properties.length; i++){
-            if(properties[i] == null){
-                properties[i] = s;
-                break;
-            }
+    public boolean buyStreet(Street s){
+        if(money >= s.getPrice()){
+            money -= s.getPrice();
+            properties.add(s);
+            s.setOwner(this);
+            return true;
+        }else{
+            return false;
         }
     }
 
-    public void removeProperty(Street s){
-        for(int i = 0; i < properties.length; i++){
-            if(properties[i] == s){
-                properties[i] = null;
-                break;
-            }
+    public void sellStreet(Street s){
+        if(properties.contains(s)){
+            properties.remove(s);
+            money += s.getPrice();
+            s.setOwner(null);
         }
+    }
+
+    public void payPlayer(Player p, int amount){
+        subtractMoney(amount);
+        p.addMoney(amount);
     }
 
     public void addMoney(int m){
@@ -68,8 +74,8 @@ public class Player implements Serializable{
 
     public void move(int m){
         position += m;
-        if(position >= 39){
-            position -= 39;
+        if(position >= 40){
+            position -= 40;
             addMoney(200);
         }
     }
@@ -119,6 +125,10 @@ public class Player implements Serializable{
     }
     public void setColor(Color color){
         this.color = color;
+    }
+
+    public Color getColor(){
+        return color;
     }
 
     public int getPosition(){

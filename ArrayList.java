@@ -95,6 +95,15 @@ public class ArrayList<E> implements Iterable<E>, Serializable{
     public int size() {
         return size;
     }
+    
+    public boolean contains(E e){
+        for(int i = 0; i < size; i++){
+            if(list[i].equals(e)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public boolean isEmpty() {
         return size == 0;
@@ -118,4 +127,5 @@ public class ArrayList<E> implements Iterable<E>, Serializable{
             return get(index++);
         }
     };
+
 }

@@ -5,6 +5,7 @@ public class Street implements Serializable{
     Font font = new Font("KabelBdNormal", Font.PLAIN, 12);
     String name, color;
     int rent, price, mortgage, houseCost, hotelCost, houses, function, xSize, ySize;
+    Player owner;
     Color drawColor;
     public Street(String name, int rent, int price, int mortgage, int houseCost, int hotelCost, int houses, boolean hotel, String color, int function){
         this.name = name;
@@ -82,6 +83,11 @@ public class Street implements Serializable{
             yAdd += 20;
             x -= xAdd;
         }
+
+        if(owner != null){
+            g.setColor(owner.getColor());
+            g.fillRect(x + 25, y + 90, 10, 10);
+        }
         
         g2d.rotate(Math.toRadians(-rotation), x, y);
         // System.out.println("Drew street" + name);
@@ -111,8 +117,10 @@ public class Street implements Serializable{
     private void mapColors(){
         //make it so that it makes the drawColor be the color of the street
         if(function > 1){
-            drawColor = new Color(150, 150, 150);
+            drawColor = new Color(175, 175, 175);
             return;
+        }else if(function == 1){
+            drawColor = Color.WHITE;
         }else if(color.equals("Brown")){
             drawColor = new Color(139, 69, 19);
             return;
@@ -145,6 +153,14 @@ public class Street implements Serializable{
             drawColor = new Color(0, 0, 255);
             return;
         }
+    }
+
+    public void setOwner(Player p){
+        owner = p;
+    }
+
+    public Player getOwner(){
+        return owner;
     }
  
 }
