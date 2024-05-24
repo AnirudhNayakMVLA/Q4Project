@@ -13,9 +13,8 @@ public class Player implements Serializable{
     private ArrayList<Street> properties;
     private int numGetOutOfJailCards;
     private boolean isBankrupt;
-    private int numTurns;
     private int numDoubles;
-    private int numJailTurns;
+
     private Color color;
 
     public Player(int num, Color color){
@@ -30,9 +29,7 @@ public class Player implements Serializable{
         properties = new ArrayList<Street>();
         numGetOutOfJailCards = 0;
         isBankrupt = false;
-        numTurns = 0;
         numDoubles = 0;
-        numJailTurns = 0;
         
     }
 
@@ -104,17 +101,10 @@ public class Player implements Serializable{
         isBankrupt = b;
     }
 
-    public void setNumTurns(int n){
-        numTurns = n;
-    }
-
     public void setNumDoubles(int n){
         numDoubles = n;
     }
 
-    public void setNumJailTurns(int n){
-        numJailTurns = n;
-    }
 
     public int getPlayerNum(){
         return playerNum;
@@ -140,5 +130,15 @@ public class Player implements Serializable{
         g.fillOval(x, y, 20, 20); 
         g.setColor(Color.BLACK);
         g.drawOval(x, y, 20, 20);
+    }
+
+    public boolean isInJail(){
+        return inJail;
+    }
+
+    public void sendToJail(){
+        int position = 10;
+        setInJail(true);
+        setJailTurns(0);
     }
 }

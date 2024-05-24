@@ -24,11 +24,15 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private Random rand;
     private JButton buy, leave;
     private boolean move = true;
+    private int dice1, dice2;
+    private JLabel cardDirection;
     
     
     public ClientScreen() {
+
         bgColor = new Color(202, 232, 224);
-        rand = new Random();
+        dice1 = 0;
+        dice2 = 0;
         
         buy = new JButton("Buy");
         buy.setBounds(0, 0, 100, 50);
@@ -40,6 +44,12 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         leave.addActionListener(this);
         add(leave);
 
+        cardDirection = new JLabel("Card Direction");
+        cardDirection.setBounds(0, 100, 100, 50);
+        add(cardDirection);
+        cardDirection.setVisible(false);
+
+
         buy.setVisible(false);
         leave.setVisible(false);
         
@@ -48,7 +58,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         addMouseListener(this);
     }
     public void connect(){
-        String hostName = "10.210.114.146"; /*
+        String hostName = "10.210.116.96"; /*
         Anirudh's Computer: 192.168.5.114  for bens wifi, 10.210.114.146 for school wifi, 192.168.1.15 for anirudhs wifi
         */
 		int portNumber = 1024;
@@ -128,6 +138,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     }
 
     public void mousePressed(MouseEvent e) {
+        cardDirection.setVisible(false);
         if(startMenu){
             if(e.getX() <= 500 && e.getY() <= 500){
                 playerNum = 1;
@@ -154,7 +165,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             catch(IOException ex){ex.printStackTrace();}
             //repaint();
         }else if(buy.isVisible() == false && leave.isVisible() == false && move){
-            board.movePlayer(playerNum, rand.nextInt(6)+1 + rand.nextInt(6)+1);
+            rollDice();
+            board.movePlayer(playerNum, dice1 + dice2);
             try{outObj.writeObject(board);}
             catch(IOException ex){ex.printStackTrace();}
             if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function <= 2){
@@ -163,12 +175,50 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 leave.setVisible(true);
                 move = false;
             }
+            //if player lands on chance 
+            if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function == 3){
+                System.out.println("Chance");
+                Card c = board.getChance().pop();
+                int action = c.action();
+                if(action < 6){
+                    board.getChance().add(c);
+                }
+                switch (action){
+                    case 1:
+                        board.getPlayer(playerNum).setPosition(c.getActionNum());
+                        break;
+                    case 2:
+                        board.getPlayer(playerNum).move(c.getActionNum());
+                        break;
+                    case 3:
+                        board.getPlayer(playerNum).addMoney(c.getActionNum());
+                        break;
+                    case 4:
+                        board.getPlayer(playerNum).subtractMoney(c.getActionNum());
+                        break;
+                    case 5:
+                        board.getPlayer(playerNum).sendToJail();
+                        break;
+                }
+                try{outObj.writeObject(board);}
+                catch(IOException ex){ex.printStackTrace();}
+                cardDirection.setText(c.getDirection());
+                cardDirection.setVisible(true);
+
+            }
             
             //repaint();
         }else{
             System.out.println("Buy or leave!");
         }
         
+    }
+
+    public void rollDice(){
+        rand = new Random();
+        dice1 = rand.nextInt(6)+1;
+        dice2 = rand.nextInt(6)+1;
+        System.out.println("Dice 1: " + dice1 + " Dice 2: " + dice2);
     }
 
     public void mouseReleased(MouseEvent e) {
