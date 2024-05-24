@@ -59,7 +59,9 @@ public class Board implements Serializable{
     public void setPlayerPos(int playerNum, int pos){
         for(Player p : players){
             if(p.getPlayerNum() == playerNum){
+                System.out.println("Setting player " + playerNum + " to pos " + pos);
                 p.setPosition(pos);
+                System.out.println(playerAtPos(pos).toString());
                 return;
             }
         }

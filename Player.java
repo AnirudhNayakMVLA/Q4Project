@@ -66,6 +66,7 @@ public class Player implements Serializable{
     }
 
     public void setPosition(int p){
+        System.out.println("Setting position to " + p);
         position = p;
     }
 
@@ -140,5 +141,9 @@ public class Player implements Serializable{
         int position = 10;
         setInJail(true);
         setJailTurns(0);
+    }
+
+    public String toString(){
+        return "Player " + playerNum;
     }
 }

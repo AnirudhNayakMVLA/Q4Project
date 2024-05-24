@@ -1,4 +1,6 @@
-public class Queue<E> {
+import java.io.Serializable;
+
+public class Queue<E> implements Serializable{
     private Node<E> head;
     private Node<E> tail;
     private int size;

@@ -58,7 +58,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         addMouseListener(this);
     }
     public void connect(){
-        String hostName = "10.210.116.96"; /*
+        String hostName = "10.210.114.146"; /*
         Anirudh's Computer: 192.168.5.114  for bens wifi, 10.210.114.146 for school wifi, 192.168.1.15 for anirudhs wifi
         */
 		int portNumber = 1024;
@@ -72,7 +72,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 					Object o = inObj.readObject();
 					if(o instanceof Board){
 						board = (Board) o;
-                        System.out.println("Board received");
+                        // System.out.println("Board received");
                         repaint();
 					}
 					//System.out.println(board);
@@ -103,13 +103,15 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 g.setColor(bgColor);
                 g.fillRect(0, 0, 1000, 1000);
                 drawBoard(g);
-                System.out.println("Board drawn");
+                // System.out.println("Board drawn");
                 g.setColor(Color.BLACK);
                 g.drawString(board.getPlayer(playerNum).getMoney() + "", 0, 250);
             }catch(Exception e){
                 System.out.println("board not initialized");
             }
         }
+
+        g.drawString(dice1 + ", " + dice2, 500, 500);
         
     }
 
@@ -125,7 +127,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             move = true;
         }
         if(e.getSource() == leave){
-            System.out.println("fuck");
             leave.setVisible(false);
             buy.setVisible(false);
             move = true;
@@ -170,15 +171,17 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             try{outObj.writeObject(board);}
             catch(IOException ex){ex.printStackTrace();}
             if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function <= 2){
-                System.out.println("Buy or leave!");
+                // System.out.println("Buy or leave!");
                 buy.setVisible(true);
                 leave.setVisible(true);
                 move = false;
             }
             //if player lands on chance 
-            if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function == 3){
+            if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function == 4){
                 System.out.println("Chance");
                 Card c = board.getChance().pop();
+                System.out.println(c);
+                System.out.println(c.getDirection());
                 int action = c.action();
                 if(action < 6){
                     board.getChance().add(c);
@@ -206,10 +209,41 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 cardDirection.setVisible(true);
 
             }
+            if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function == 5){
+                System.out.println("Community Chest");
+                Card c = board.getCommunityChest().pop();
+                int action = c.action();
+                if(action < 6){
+                    board.getCommunityChest().add(c);
+                }
+                switch (action){
+                    case 1:
+                        System.out.println("Moving to plafce" + c.getActionNum());
+                        board.setPlayerPos(playerNum, c.getActionNum());
+                        board.movePlayer(playerNum, 0);
+                        break;
+                    case 2:
+                        board.getPlayer(playerNum).move(c.getActionNum());
+                        break;
+                    case 3:
+                        board.getPlayer(playerNum).addMoney(c.getActionNum());
+                        break;
+                    case 4:
+                        board.getPlayer(playerNum).subtractMoney(c.getActionNum());
+                        break;
+                    case 5:
+                        board.getPlayer(playerNum).sendToJail();
+                        break;
+                }
+                try{outObj.writeObject(board);}
+                catch(IOException ex){ex.printStackTrace();}
+                cardDirection.setText(c.getDirection());
+                cardDirection.setVisible(true);
+
+            }
             
-            //repaint();
+            repaint();
         }else{
-            System.out.println("Buy or leave!");
         }
         
     }
@@ -237,7 +271,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void drawBoard(Graphics g){
         ArrayList <Street> streets = board.getStreets();
         g.setColor(bgColor);
-        System.out.println("Drawing board");
+        // System.out.println("Drawing board");
         g.fillRect(110, 110, 780, 780);
         g.setColor(Color.BLACK);
         g.drawRect(110, 110, 780, 780);
@@ -274,6 +308,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         }
         x = 770;
         y = 770;
+        
         for (int i = 0; i < 10; i++){
             Player p = board.playerAtPos(i);
             if(p != null){

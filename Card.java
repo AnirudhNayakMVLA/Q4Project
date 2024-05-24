@@ -1,4 +1,6 @@
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable{
     private boolean moveNumStreets;
     private boolean giveMoney;
     private boolean takeMoney;
