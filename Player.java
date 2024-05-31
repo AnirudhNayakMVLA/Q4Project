@@ -34,7 +34,7 @@ public class Player implements Serializable{
     }
 
     public boolean buyStreet(Street s){
-        if(money >= s.getPrice()){
+        if(canBuy(s)){
             money -= s.getPrice();
             properties.add(s);
             s.setOwner(this);
@@ -42,6 +42,10 @@ public class Player implements Serializable{
         }else{
             return false;
         }
+    }
+
+    public boolean canBuy(Street s){
+        return money >= s.getPrice() && (s.getOwner() == null || s.getOwner().equals(this));
     }
 
     public void sellStreet(Street s){
@@ -145,5 +149,14 @@ public class Player implements Serializable{
 
     public String toString(){
         return "Player " + playerNum;
+    }
+    
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Player){
+            Player p = (Player) o;
+            return p.getPlayerNum() == playerNum;
+        }
+        return false;
     }
 }

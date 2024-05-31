@@ -4,7 +4,10 @@ public class Board implements Serializable{
     ArrayList<Street> streets;
     ArrayList<Player> players;    
     Queue<Card> chance, communityChest;
+    /*static */int playerTurn;
+    
     public Board(ArrayList<Street> streets){
+        playerTurn = 0;
         this.streets = streets;
         players = new ArrayList<Player>();
         chance = new Queue<Card>();
@@ -133,6 +136,25 @@ public class Board implements Serializable{
         return communityChest;
     }
 
+    public int playerTurn(){
+        System.out.println(players);
+        System.out.println("player turn: " + playerTurn);
+        return players.get(playerTurn).getPlayerNum();
+    }
+    
+    public void incrementTurn(){   
+        System.out.println("initial player turn: " + playerTurn); 
+        playerTurn++;
+        if(playerTurn >= players.size()){
+            System.out.println("reset turn to 0");
+            playerTurn = 0;
+        }
+        System.out.println("players size: " + players.size());
+        System.out.println("incremented turn. new turn is " + playerTurn);
+    }
+    public int getTurn(){
+        return playerTurn;
+    }
 
 
 }

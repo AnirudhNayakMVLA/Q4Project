@@ -87,6 +87,8 @@ public class Street implements Serializable{
         if(owner != null){
             g.setColor(owner.getColor());
             g.fillRect(x + 25, y + 90, 10, 10);
+            g.setColor(Color.BLACK);
+            g.drawRect(x + 25, y + 90, 10, 10);
         }
         
         g2d.rotate(Math.toRadians(-rotation), x, y);
@@ -161,6 +163,13 @@ public class Street implements Serializable{
 
     public Player getOwner(){
         return owner;
+    }
+
+    public int getOwnerNum(){
+        if(owner == null){
+            return -1;
+        }
+        return owner.getPlayerNum();
     }
  
 }

@@ -165,12 +165,13 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             try{outObj.writeObject(board);}
             catch(IOException ex){ex.printStackTrace();}
             //repaint();
-        }else if(buy.isVisible() == false && leave.isVisible() == false && move){
+        }   
+        else if(buy.isVisible() == false && leave.isVisible() == false && move && (board.playerTurn() == playerNum)){
             rollDice();
             board.movePlayer(playerNum, dice1 + dice2);
             try{outObj.writeObject(board);}
             catch(IOException ex){ex.printStackTrace();}
-            if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function <= 2){
+            if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function <= 2 && board.getPlayer(playerNum).canBuy(board.getStreets().get(board.getPlayer(playerNum).getPosition()))){
                 // System.out.println("Buy or leave!");
                 buy.setVisible(true);
                 leave.setVisible(true);
@@ -203,8 +204,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                         board.getPlayer(playerNum).sendToJail();
                         break;
                 }
-                try{outObj.writeObject(board);}
-                catch(IOException ex){ex.printStackTrace();}
                 cardDirection.setText(c.getDirection());
                 cardDirection.setVisible(true);
 
@@ -235,16 +234,17 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                         board.getPlayer(playerNum).sendToJail();
                         break;
                 }
-                try{outObj.writeObject(board);}
-                catch(IOException ex){ex.printStackTrace();}
                 cardDirection.setText(c.getDirection());
                 cardDirection.setVisible(true);
 
             }
-            
-            repaint();
-        }else{
+            board.incrementTurn();
+            System.out.println("Turn: " + board.getTurn());
+            try{outObj.writeObject(board);}
+            catch(IOException ex){ex.printStackTrace();}
+
         }
+        System.out.println("board.playerTurn() == playerNum: " + (board.playerTurn() == playerNum) + " board.playerTurn(): " + board.playerTurn() + " playerNum: " + playerNum);
         
     }
 
@@ -315,11 +315,11 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 // System.out.println("Player at pos " + i);
                 //System.out.println(board.playerAtPos(i).getMoney());
                 p.drawMe(x + 20, y + 50, g);
-                if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() == null) && !move){
+                if(p.canBuy(streets.get(i)) && !move){
                    buy.setVisible(true);
                    leave.setVisible(true);
-                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && !move){
-                    p.payPlayer(streets.get(i).getOwner(), streets.get(i).getRent());
+                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner().equals(board.getPlayer(playerNum))) && (streets.get(i).getOwner() != null) && !move){
+                    p.payPlayer(board.getPlayer(streets.get(i).getOwnerNum()), streets.get(i).getRent());
                 }
             }
             x -= 60;
@@ -332,11 +332,11 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 // System.out.println("Player at pos " + i);
                 //System.out.println(board.playerAtPos(i).getMoney());
                 p.drawMe(x - 50, y + 20, g);
-                if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() == null && !move)){
+                if(p.canBuy(streets.get(i)) && !move){
                    buy.setVisible(true);
                    leave.setVisible(true);
-                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && !move){
-                    p.payPlayer(streets.get(i).getOwner(), streets.get(i).getRent());
+                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && (streets.get(i).getOwner() != null) && !move){
+                    p.payPlayer(board.getPlayer(streets.get(i).getOwnerNum()), streets.get(i).getRent());
                 }
             }
             y -= 60;
@@ -349,11 +349,11 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 // System.out.println("Player at pos " + i);
                 //System.out.println(board.playerAtPos(i).getMoney());
                 p.drawMe(x + 20, y - 50, g);
-                if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() == null) && !move){
+                if(p.canBuy(streets.get(i)) && !move){
                    buy.setVisible(true);
                    leave.setVisible(true);
-                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && !move){
-                    p.payPlayer(streets.get(i).getOwner(), streets.get(i).getRent());
+                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && (streets.get(i).getOwner() != null) && !move){
+                    p.payPlayer(board.getPlayer(streets.get(i).getOwnerNum()), streets.get(i).getRent());
                 }
             }
             x += 60;
@@ -365,11 +365,11 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 // System.out.println("Player at pos " + i);
                 //System.out.println(board.playerAtPos(i).getMoney());
                 p.drawMe(x + 50, y + 20, g);
-                if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() == null) && !move){
+                if(p.canBuy(streets.get(i)) && !move){
                    buy.setVisible(true);
                    leave.setVisible(true);
-                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && !move){
-                    p.payPlayer(streets.get(i).getOwner(), streets.get(i).getRent());
+                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && (streets.get(i).getOwner() != null) && !move){
+                    p.payPlayer(board.getPlayer(streets.get(i).getOwnerNum()), streets.get(i).getRent());
                 }
             }
             y += 60;
