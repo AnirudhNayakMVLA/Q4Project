@@ -8,6 +8,7 @@ public class Board implements Serializable{
     
     public Board(ArrayList<Street> streets){
         playerTurn = 0;
+        System.out.println("board constructor changed player turn");
         this.streets = streets;
         players = new ArrayList<Player>();
         chance = new Queue<Card>();

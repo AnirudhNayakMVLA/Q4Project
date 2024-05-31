@@ -123,7 +123,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             }
             leave.setVisible(false);
             buy.setVisible(false);
-            try{outObj.writeObject(board);}
+            try{
+                outObj.reset();
+                outObj.writeObject(board);}
             catch(IOException ex){ex.printStackTrace();}
             move = true;
         }
@@ -164,14 +166,18 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 board.addPlayer(new Player(playerNum, playerColor));
             }
             startMenu = false;
-            try{outObj.writeObject(board);}
+            try{
+                outObj.reset();
+                outObj.writeObject(board);}
             catch(IOException ex){ex.printStackTrace();}
             //repaint();
         }   
         else if(!buy.isVisible() && !leave.isVisible() && move && (board.getPlayerTurn() == playerNum)){
             rollDice();
             board.movePlayer(playerNum, dice1 + dice2);
-            try{outObj.writeObject(board);}
+            try{
+                outObj.reset();
+                outObj.writeObject(board);}
             catch(IOException ex){ex.printStackTrace();}
             //if player lands on street and can buy it
             if((board.getStreets().get(board.getPlayer(playerNum).getPosition()).function <= 2) && (board.getPlayer(playerNum).canBuy(board.getStreets().get(board.getPlayer(playerNum).getPosition())))){
@@ -243,7 +249,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             }
             board.incrementTurn();
             System.out.println("Turn: " + board.getTurn());
-            try{outObj.writeObject(board);}
+            try{
+                outObj.reset();
+                outObj.writeObject(board);}
             catch(IOException ex){ex.printStackTrace();}
 
         }
