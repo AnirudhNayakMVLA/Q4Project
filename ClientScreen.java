@@ -185,7 +185,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 buy.setVisible(true);
                 leave.setVisible(true);
                 move = false;
-            }else if((board.getStreets().get(board.getPlayer(playerNum).getPosition()).function <= 2) && (board.getStreets().get(board.getPlayer(playerNum).getPosition()).needsRent(board.getPlayer(playerNum)))){
+            }
+            //if player lands on street and needs to pay rent
+            else if((board.getStreets().get(board.getPlayer(playerNum).getPosition()).function <= 2) && (board.getStreets().get(board.getPlayer(playerNum).getPosition()).needsRent(board.getPlayer(playerNum)))){
                 System.out.println("Pay rent");
                 board.getPlayer(playerNum).subtractMoney(board.getStreets().get(board.getPlayer(playerNum).getPosition()).getRent());
                 board.getStreets().get(board.getPlayer(playerNum).getPosition()).getOwner().addMoney(board.getStreets().get(board.getPlayer(playerNum).getPosition()).getRent());
