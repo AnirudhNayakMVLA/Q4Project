@@ -93,8 +93,8 @@ public class Board implements Serializable{
     public void setChance(){
         //add all of the chance cards to the queue
         chance.add(new Card("Advance to Go", Card.cardType.MOVE_TO_STREET, 0));
-        chance.add(new Card("Advance to Illinois Ave", Card.cardType.MOVE_TO_STREET, 24));
-        chance.add(new Card("Advance to St. Charles Place", Card.cardType.MOVE_TO_STREET, 11));
+        chance.add(new Card("Advance to Moffet Blvd", Card.cardType.MOVE_TO_STREET, 24));
+        chance.add(new Card("Advance to Church St.", Card.cardType.MOVE_TO_STREET, 11));
         //chance.add(new Card("Advance to nearest utility", 0));
         //chance.add(new Card("Advance to nearest railroad", 0));
         chance.add(new Card("Bank pays you dividend of $50", Card.cardType.GIVE_MONEY, 50));
@@ -103,8 +103,8 @@ public class Board implements Serializable{
         chance.add(new Card("Go to jail", Card.cardType.GO_TO_JAIL, 0));
         //chance.add(new Card("Make general repairs on all your property", 0));
         chance.add(new Card("Pay poor tax of $15", Card.cardType.TAKE_MONEY, -15));
-        chance.add(new Card("Take a trip to Reading Railroad", Card.cardType.MOVE_TO_STREET, 5));
-        chance.add(new Card("Take a walk on the Boardwalk", Card.cardType.MOVE_TO_STREET, 39));
+        chance.add(new Card("Take a trip to CA-237", Card.cardType.MOVE_TO_STREET, 5));
+        chance.add(new Card("Take a drive on El Camino Real", Card.cardType.MOVE_TO_STREET, 39));
         chance.add(new Card("You have been elected chairman of the board", Card.cardType.TAKE_MONEY, (-50 * (players.size() - 1))));
         chance.add(new Card("Your building loan matures", Card.cardType.GIVE_MONEY, 150));
 
