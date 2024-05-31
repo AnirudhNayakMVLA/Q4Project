@@ -185,6 +185,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 buy.setVisible(true);
                 leave.setVisible(true);
                 move = false;
+            }else if((board.getStreets().get(board.getPlayer(playerNum).getPosition()).function <= 2) && (board.getStreets().get(board.getPlayer(playerNum).getPosition()).needsRent(board.getPlayer(playerNum)))){
+                System.out.println("Pay rent");
+                board.getPlayer(playerNum).subtractMoney(board.getStreets().get(board.getPlayer(playerNum).getPosition()).getRent());
+                board.getStreets().get(board.getPlayer(playerNum).getPosition()).getOwner().addMoney(board.getStreets().get(board.getPlayer(playerNum).getPosition()).getRent());
             }
             //if player lands on chance 
             else if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function == 4){
@@ -329,8 +333,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 if(p.canBuy(streets.get(i)) && !move){
                    buy.setVisible(true);
                    leave.setVisible(true);
-                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner().equals(board.getPlayer(playerNum))) && (streets.get(i).getOwner() != null) && !move){
-                    p.payPlayer(board.getPlayer(streets.get(i).getOwnerNum()), streets.get(i).getRent());
                 }
             }
             x -= 60;
@@ -346,8 +348,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 if(p.canBuy(streets.get(i)) && !move){
                    buy.setVisible(true);
                    leave.setVisible(true);
-                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && (streets.get(i).getOwner() != null) && !move){
-                    p.payPlayer(board.getPlayer(streets.get(i).getOwnerNum()), streets.get(i).getRent());
                 }
             }
             y -= 60;
@@ -363,8 +363,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 if(p.canBuy(streets.get(i)) && !move){
                    buy.setVisible(true);
                    leave.setVisible(true);
-                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && (streets.get(i).getOwner() != null) && !move){
-                    p.payPlayer(board.getPlayer(streets.get(i).getOwnerNum()), streets.get(i).getRent());
                 }
             }
             x += 60;
@@ -379,8 +377,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 if(p.canBuy(streets.get(i)) && !move){
                    buy.setVisible(true);
                    leave.setVisible(true);
-                }else if((streets.get(i).function <= 2 ) && (streets.get(i).getOwner() != board.getPlayer(playerNum)) && (streets.get(i).getOwner() != null) && !move){
-                    p.payPlayer(board.getPlayer(streets.get(i).getOwnerNum()), streets.get(i).getRent());
                 }
             }
             y += 60;

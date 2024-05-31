@@ -171,5 +171,9 @@ public class Street implements Serializable{
         }
         return owner.getPlayerNum();
     }
+
+    public boolean needsRent(Player p){
+        return owner != null && !owner.equals(p);
+    }
  
 }
