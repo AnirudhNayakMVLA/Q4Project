@@ -106,12 +106,13 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 // System.out.println("Board drawn");
                 g.setColor(Color.BLACK);
                 g.drawString(board.getPlayer(playerNum).getMoney() + "", 0, 250);
+                g.drawString(board.getPlayerTurn() + "", 500, 250);
+                g.drawString(dice1 + ", " + dice2, 500, 500);
             }catch(Exception e){
                 System.out.println("board not initialized");
             }
         }
 
-        g.drawString(dice1 + ", " + dice2, 500, 500);
         
     }
 
@@ -140,6 +141,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     public void mousePressed(MouseEvent e) {
         cardDirection.setVisible(false);
+        if(!startMenu) System.out.println("board.playerTurn() == playerNum: " + (board.getPlayerTurn() == playerNum) + " board.getPlayerTurn(): " + board.getPlayerTurn() + " playerNum: " + playerNum);
         if(startMenu){
             if(e.getX() <= 500 && e.getY() <= 500){
                 playerNum = 1;
@@ -166,19 +168,20 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             catch(IOException ex){ex.printStackTrace();}
             //repaint();
         }   
-        else if(buy.isVisible() == false && leave.isVisible() == false && move && (board.playerTurn() == playerNum)){
+        else if(!buy.isVisible() && !leave.isVisible() && move && (board.getPlayerTurn() == playerNum)){
             rollDice();
             board.movePlayer(playerNum, dice1 + dice2);
             try{outObj.writeObject(board);}
             catch(IOException ex){ex.printStackTrace();}
-            if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function <= 2 && board.getPlayer(playerNum).canBuy(board.getStreets().get(board.getPlayer(playerNum).getPosition()))){
+            //if player lands on street and can buy it
+            if((board.getStreets().get(board.getPlayer(playerNum).getPosition()).function <= 2) && (board.getPlayer(playerNum).canBuy(board.getStreets().get(board.getPlayer(playerNum).getPosition())))){
                 // System.out.println("Buy or leave!");
                 buy.setVisible(true);
                 leave.setVisible(true);
                 move = false;
             }
             //if player lands on chance 
-            if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function == 4){
+            else if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function == 4){
                 System.out.println("Chance");
                 Card c = board.getChance().pop();
                 System.out.println(c);
@@ -208,7 +211,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 cardDirection.setVisible(true);
 
             }
-            if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function == 5){
+            else if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function == 5){
                 System.out.println("Community Chest");
                 Card c = board.getCommunityChest().pop();
                 int action = c.action();
@@ -244,7 +247,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             catch(IOException ex){ex.printStackTrace();}
 
         }
-        System.out.println("board.playerTurn() == playerNum: " + (board.playerTurn() == playerNum) + " board.playerTurn(): " + board.playerTurn() + " playerNum: " + playerNum);
+        System.out.println("board.getPlayerTurn() == playerNum: " + (board.getPlayerTurn() == playerNum) + " board.playerTurn(): " + board.getPlayerTurn() + " playerNum: " + playerNum);
         
     }
 

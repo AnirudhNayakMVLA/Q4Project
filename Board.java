@@ -27,7 +27,7 @@ public class Board implements Serializable{
     public Player playerAtPos(int pos){
         for(Player p : players){
             if(p.getPosition() == pos){
-                System.out.println("Player at pos " + pos + ", " + streets.get(pos));
+                //System.out.println("Player at pos " + pos + ", " + streets.get(pos));
                 return p;
             }
         }
@@ -136,7 +136,7 @@ public class Board implements Serializable{
         return communityChest;
     }
 
-    public int playerTurn(){
+    public int getPlayerTurn(){
         System.out.println(players);
         System.out.println("player turn: " + playerTurn);
         return players.get(playerTurn).getPlayerNum();
