@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.util.Random;
+import java.awt.Font;
 
 
 public class ClientScreen extends JPanel implements ActionListener, MouseListener{
@@ -20,12 +21,14 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private int playerNum;
     private Color playerColor;
     private boolean startMenu = true;
+    private boolean endScreen = false;
     private Color bgColor;
     private Random rand;
-    private JButton buy, leave;
+    private JButton buy, leave, forfeit;
     private boolean move = true;
     private int dice1, dice2;
     private JLabel cardDirection;
+    private Font diceFont = new Font("BlackNorthDemo", Font.PLAIN, 20);
     
     
     public ClientScreen() {
@@ -44,6 +47,11 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         leave.addActionListener(this);
         add(leave);
 
+        forfeit = new JButton("Forfeit");
+        forfeit.setBounds(800, 50, 100, 50);
+        forfeit.addActionListener(this);
+        add(forfeit);
+
         cardDirection = new JLabel("Card Direction");
         cardDirection.setBounds(0, 100, 100, 50);
         add(cardDirection);
@@ -52,6 +60,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
         buy.setVisible(false);
         leave.setVisible(false);
+        forfeit.setVisible(false);
         
 		setLayout(null);
 		setFocusable(true);
@@ -98,6 +107,13 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             g.setColor(Color.YELLOW);
             g.fillRect(500, 500, 500, 500);
         }
+        else if(endScreen){
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, 1000, 1000);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.BOLD, 180));
+            g.drawString("Game Over", 0, 550);
+        }
         else{
             try{
                 g.setColor(bgColor);
@@ -107,7 +123,18 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 g.setColor(Color.BLACK);
                 g.drawString(board.getPlayer(playerNum).getMoney() + "", 0, 250);
                 g.drawString(board.getPlayerTurn() + "", 500, 250);
-                g.drawString(dice1 + ", " + dice2, 500, 500);
+                //draw 2 dice
+                g.setColor(Color.WHITE);
+                g.fillRect(430, 470, 60, 60);
+                g.fillRect(510, 470, 60, 60);
+                g.setColor(Color.BLACK);
+                g.drawRect(430, 470, 60, 60);
+                g.drawRect(510, 470, 60, 60);
+                g.setFont(diceFont);
+                g.drawString(dice1 + "", 450, 500);
+                g.drawString(dice2 + "", 530, 500);
+
+                
             }catch(Exception e){
                 System.out.println("board not initialized");
             }
@@ -123,16 +150,25 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             }
             leave.setVisible(false);
             buy.setVisible(false);
+            board.incrementTurn();
             try{
                 outObj.reset();
                 outObj.writeObject(board);}
             catch(IOException ex){ex.printStackTrace();}
             move = true;
+            board.incrementTurn();
         }
         if(e.getSource() == leave){
             leave.setVisible(false);
             buy.setVisible(false);
             move = true;
+        }
+        if(e.getSource() == forfeit){
+            endScreen = true;
+            try{
+                outObj.reset();
+                outObj.writeObject(board);}
+            catch(IOException ex){ex.printStackTrace();}
         }
         repaint();
     }
@@ -166,6 +202,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 board.addPlayer(new Player(playerNum, playerColor));
             }
             startMenu = false;
+            forfeit.setVisible(true);
             try{
                 outObj.reset();
                 outObj.writeObject(board);}
@@ -192,7 +229,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 board.getPlayer(playerNum).subtractMoney(board.getStreets().get(board.getPlayer(playerNum).getPosition()).getRent());
                 board.getStreets().get(board.getPlayer(playerNum).getPosition()).getOwner().addMoney(board.getStreets().get(board.getPlayer(playerNum).getPosition()).getRent());
             }
-            //if player lands on chance 
+            //if player lands on chance or community chest
             else if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function == 4){
                 System.out.println("Chance");
                 Card c = board.getChance().pop();
@@ -257,7 +294,12 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 cardDirection.setVisible(true);
 
             }
-            board.incrementTurn();
+            else if(board.getStreets().get(board.getPlayer(playerNum).getPosition()).function == 9){
+                board.getPlayer(playerNum).sendToJail();
+            }
+            if(move){
+                board.incrementTurn();
+            }
             System.out.println("Turn: " + board.getTurn());
             try{
                 outObj.reset();
@@ -273,7 +315,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         rand = new Random();
         dice1 = rand.nextInt(6)+1;
         dice2 = rand.nextInt(6)+1;
-        System.out.println("Dice 1: " + dice1 + " Dice 2: " + dice2);
     }
 
     public void mouseReleased(MouseEvent e) {

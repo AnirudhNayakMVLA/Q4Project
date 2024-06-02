@@ -44,4 +44,21 @@ public class Queue<E> implements Serializable{
     public int size(){
         return size;
     }
+
+    public void shuffle(){
+        Node<E> current = head;
+        Node<E> temp;
+        int rand;
+        for(int i = 0; i < size; i++){
+            rand = (int)(Math.random() * size);
+            temp = current;
+            for(int j = 0; j < rand; j++){
+                temp = temp.next();
+            }
+            E data = current.get();
+            current.setData(temp.get());
+            temp.setData(data);
+            current = current.next();
+        }
+    }
 }

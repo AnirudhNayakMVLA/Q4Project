@@ -142,7 +142,7 @@ public class Player implements Serializable{
     }
 
     public void sendToJail(){
-        int position = 10;
+        position = 10;
         setInJail(true);
         setJailTurns(0);
     }
