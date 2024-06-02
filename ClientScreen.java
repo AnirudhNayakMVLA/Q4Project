@@ -58,7 +58,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         addMouseListener(this);
     }
     public void connect(){
-        String hostName = "10.210.114.146"; /*
+        String hostName = "192.168.5.114"; /*
         Anirudh's Computer: 192.168.5.114  for bens wifi, 10.210.114.146 for school wifi, 192.168.1.15 for anirudhs wifi
         */
 		int portNumber = 1024;
