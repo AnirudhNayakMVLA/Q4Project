@@ -205,6 +205,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 switch (action){
                     case 1:
                         board.getPlayer(playerNum).setPosition(c.getActionNum());
+                        if(c.getActionNum() == 0){
+                            board.getPlayer(playerNum).addMoney(200);
+                        }
                         break;
                     case 2:
                         board.getPlayer(playerNum).move(c.getActionNum());
@@ -232,9 +235,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 }
                 switch (action){
                     case 1:
-                        System.out.println("Moving to plafce" + c.getActionNum());
-                        board.setPlayerPos(playerNum, c.getActionNum());
-                        board.movePlayer(playerNum, 0);
+                        board.getPlayer(playerNum).setPosition(c.getActionNum());
+                        if(c.getActionNum() == 0){
+                            board.getPlayer(playerNum).addMoney(200);
+                        }
                         break;
                     case 2:
                         board.getPlayer(playerNum).move(c.getActionNum());
