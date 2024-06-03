@@ -14,6 +14,8 @@ public class Player implements Serializable{
     private int numGetOutOfJailCards;
     private boolean isBankrupt;
     private int numDoubles;
+    private boolean hasForfeited = false;
+
 
     private Color color;
 
@@ -75,11 +77,11 @@ public class Player implements Serializable{
     }
 
     public void move(int m){
-        position += m;
+        if(!hasForfeited){position += m;
         if(position >= 40){
             position -= 40;
             addMoney(200);
-        }
+        }}
     }
 
     public void setInJail(boolean b){
@@ -158,5 +160,11 @@ public class Player implements Serializable{
             return p.getPlayerNum() == playerNum;
         }
         return false;
+    }
+    public void setForfeited(boolean hasForfeited){
+        this.hasForfeited = hasForfeited;
+    }
+    public boolean hasForfeited(){
+        return hasForfeited;
     }
 }

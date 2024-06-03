@@ -4,11 +4,11 @@ public class Board implements Serializable{
     ArrayList<Street> streets;
     ArrayList<Player> players;    
     Queue<Card> chance, communityChest;
+    boolean gameStarted;
     /*static */int playerTurn;
     
     public Board(ArrayList<Street> streets){
         playerTurn = 0;
-        System.out.println("board constructor changed player turn");
         this.streets = streets;
         players = new ArrayList<Player>();
         chance = new Queue<Card>();
@@ -42,6 +42,9 @@ public class Board implements Serializable{
 
     public void addPlayer(Player p){
         players.add(p);
+        if(players.size() >= 2){
+            gameStarted = true;
+        }
     }
     
     public void removePlayer(Player p){
@@ -138,24 +141,44 @@ public class Board implements Serializable{
     }
 
     public int getPlayerTurn(){
-        System.out.println(players);
-        System.out.println("player turn: " + playerTurn);
         return players.get(playerTurn).getPlayerNum();
     }
     
     public void incrementTurn(){   
-        System.out.println("initial player turn: " + playerTurn); 
         playerTurn++;
         if(playerTurn >= players.size()){
-            System.out.println("reset turn to 0");
             playerTurn = 0;
         }
-        System.out.println("players size: " + players.size());
-        System.out.println("incremented turn. new turn is " + playerTurn);
+        
     }
     public int getTurn(){
         return playerTurn;
     }
 
+    public boolean playerHasWon(int playerNum){
+        //go thorugh all playres and check if all but one have forfeited(making him the winner) and check if there is more than 1 player
+        int numPlayersNotForfeited = 0;
+        for(Player p : players){
+            numPlayersNotForfeited++;
+            if(p.hasForfeited()){
+                numPlayersNotForfeited--;
+            }
+        }
+       //print out all variable for debugging
+        // System.out.println("numPlayers: " + numPlayersNotForfeited);
+        // System.out.println("playerNum: " + playerNum);
+        // System.out.println("players.get(playerNum).hasForfeited(): " + players.get(new Player(playerNum, null)).hasForfeited());
+        // System.out.println("gameStarted: " + gameStarted);
+        if((numPlayersNotForfeited == 1) && !players.get(new Player(playerNum, null)).hasForfeited() && gameStarted){
+            
+            return true;
+        }
+        System.out.println(numPlayersNotForfeited);
+        System.out.println(numPlayersNotForfeited == 1); 
+        System.out.println(!players.get(new Player(playerNum, null)).hasForfeited()); 
+        System.out.println(gameStarted);
+
+        return false;
+    }
 
 }

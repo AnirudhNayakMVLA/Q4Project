@@ -53,6 +53,15 @@ public class ArrayList<E> implements Iterable<E>, Serializable{
     public E get(int i) {
         return (E) list[i];
     }
+    @SuppressWarnings("unchecked")
+    public E get(E e){
+        for(int i = 0; i < size; i++){
+            if(list[i].equals(e)){
+                return (E) list[i];
+            }
+        }
+        return null;
+    }
 
     public E remove(int i) {
         E e = get(i);
