@@ -51,11 +51,14 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         instructions.setText("Welcome to Mountain View StreetMarket! \n\n" +
         "To start the game, click on one of the four colored squares. \n\n" +
         "To roll the dice, click anywhere on the screen. \n\n" +
+        "Don't click on the instructions!\n\n" + 
         "To buy a property, click the buy button. \n\n" +
         "To leave a property, click the leave button. \n\n" +
         "To forfeit the game, click the forfeit button. \n\n");
         add(instructions);
         instructions.setVisible(false);
+        instructions.setEditable(false);
+        instructions.setFocusable(false);
         
         buy = new JButton("Buy");
         buy.setBounds(0, 0, 100, 50);
@@ -232,6 +235,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+            instructions.setVisible(false);
         }
         repaint();
     }
